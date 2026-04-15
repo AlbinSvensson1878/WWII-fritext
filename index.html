@@ -4,276 +4,163 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Andra världskriget – fritextfrågor</title>
+
   <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --border: #dbe3ee;
-      --success: #ecfdf5;
-      --success-border: #86efac;
-    }
-
-    * { box-sizing: border-box; }
-
     body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
+      padding: 20px;
     }
 
     .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 32px 16px 48px;
-    }
-
-    .header {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
-      color: white;
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.18);
+      max-width: 800px;
+      margin: auto;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 2rem;
+      text-align: center;
     }
 
-    .subtitle {
-      margin: 0;
-      opacity: 0.95;
-    }
-
-    .info-box {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-
-    .question-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-    }
-
-    .question-title {
-      font-size: 1.15rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .question-text {
-      margin-bottom: 12px;
+    .question {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
     }
 
     textarea {
       width: 100%;
-      min-height: 130px;
-      border: 1px solid #cbd5e1;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 1rem;
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    textarea:focus {
-      outline: 2px solid #93c5fd;
-      border-color: var(--primary);
-    }
-
-    .button-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 24px;
+      height: 120px;
+      margin-top: 10px;
     }
 
     button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
     }
 
-    .primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .secondary {
-      background: white;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .answer-box {
+    .answer {
       display: none;
-      margin-top: 14px;
-      padding: 14px;
-      background: var(--success);
-      border: 1px solid var(--success-border);
-      border-radius: 12px;
-    }
-
-    .answer-label {
-      font-weight: bold;
-      margin-bottom: 6px;
+      background: #e6ffe6;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      white-space: pre-line;
     }
 
     .warning {
-      margin-top: 16px;
-      color: #b91c1c;
-      font-weight: bold;
+      color: red;
       display: none;
-    }
-
-    .footer-note {
-      color: var(--muted);
-      margin-top: 20px;
-      font-size: 0.95rem;
+      margin-top: 10px;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Andra världskriget – fritextfrågor</h1>
-      <p class="subtitle">Svara på frågorna med egna ord. När du är klar klickar du på Lämna in för att se mallsvaren.</p>
-    </div>
+<div class="container">
+  <h1>Fritextfrågor – Andra världskriget</h1>
+  <p>Svara på alla frågor. Klicka sedan på <b>Lämna in</b> för att se mallsvaren.</p>
 
-    <div class="info-box">
-      <strong>Instruktion:</strong> Svara på frågorna med egna ord i rutorna nedan. När du är klar klickar du på <em>Lämna in</em> för att se mallsvaren.
-    </div>
+  <div id="questions"></div>
 
-    <div id="questions"></div>
+  <button onclick="submitAnswers()">Lämna in</button>
+  <button onclick="resetAnswers()">Rensa</button>
 
-    <div class="button-row">
-      <button class="primary" onclick="submitAnswers()">Lämna in</button>
-      <button class="secondary" onclick="resetAnswers()">Rensa svar</button>
-    </div>
-
-    <div id="warning" class="warning">Du behöver skriva något i alla svarsrutor först.</div>
-    <div class="footer-note">När eleven har lämnat in visas mallsvaret under varje fråga.</div>
+  <div id="warning" class="warning">
+    Du måste svara på alla frågor först!
   </div>
+</div>
 
-  <script>
-    const questions = [
-      {
+<script>
+const questions = [
 {
   title: "Fråga 1",
-  text: "Varför kunde nazistpartiet ta makten i Tyskland? Resonera och ta hjälp av följande:\n• Hur situationen var i Tyskland (politik och ekonomi)\n• Hitlers egenskaper\n• Idéer och värderingar i samhället",
-  modelAnswer: `Nazistpartiet kunde ta makten i Tyskland av flera orsaker. En viktig orsak var att landet befann sig i en svår situation efter första världskriget. Tyskland hade förlorat kriget och tvingats skriva under Versaillesfreden. Många upplevde detta som orättvist, och landet fick stora ekonomiska problem.
+  text: "Varför kunde nazistpartiet ta makten i Tyskland? Resonera och ta hjälp av följande:\n• Hur situationen var i Tyskland\n• Hitlers egenskaper\n• Idéer i samhället",
+  modelAnswer: `Nazistpartiet kunde ta makten i Tyskland av flera orsaker. En viktig orsak var att landet hade stora problem efter första världskriget. Tyskland hade förlorat kriget och tvingats skriva under Versaillesfreden, vilket många upplevde som orättvist.
 
-Under 1930-talet blev situationen ännu värre när den stora depressionen slog till. Många blev arbetslösa och fattiga. Förtroendet för demokratin minskade eftersom många tyckte att politikerna inte kunde lösa problemen.
+Under 1930-talet blev situationen ännu värre när den stora depressionen slog till. Många människor blev arbetslösa och fattiga. Förtroendet för demokratin minskade eftersom många tyckte att politikerna inte kunde lösa problemen.
 
-En annan viktig orsak var Adolf Hitler själv. Han var en stark talare och kunde påverka människor genom sina tal och sin propaganda. Han lovade att göra Tyskland starkt igen, skapa jobb och återställa landets stolthet. Många människor började därför stödja honom.
+En annan viktig orsak var Adolf Hitler. Han var en skicklig talare och använde propaganda för att påverka människor. Han lovade jobb och att göra Tyskland starkt igen.
 
-Nazistpartiet utnyttjade också idéer som redan fanns i samhället. Nationalism var stark, och många ville att Tyskland skulle bli en stormakt igen. Det fanns också antisemitism, vilket nazisterna använde när de skyllde landets problem på judar och andra grupper.
+Nazisterna utnyttjade också idéer som redan fanns i samhället, som nationalism och antisemitism. De skyllde problemen på olika grupper och lovade enkla lösningar.
 
-Sammanfattningsvis tog nazistpartiet makten på grund av en kombination av ekonomisk kris, svag demokrati, Hitlers ledarskap och idéer i samhället som nazisterna kunde utnyttja.`
-      },
-      {
-        title: "Fråga 2",
-        text: "Hur kunde Hitler expandera utan krig i början?",
-        modelAnswer: `Hitler började bryta mot Versaillesfreden steg för steg, men andra länder reagerade svagt. Han rustade upp militären och skickade trupper till Rhenlandet 1936. Varken Frankrike eller Storbritannien ingrep militärt.
+Sammanfattningsvis tog nazistpartiet makten på grund av ekonomiska problem, svag demokrati, Hitlers ledarskap och idéer i samhället.`
+},
 
-1938 genomfördes Anschluss, där Tyskland tog över Österrike. Samma år krävde Hitler områden i Tjeckoslovakien med många tysktalande invånare. Vid Münchenöverenskommelsen gick Storbritannien och Frankrike med på detta i hopp om att bevara freden.
+{
+  title: "Fråga 2",
+  text: "Hur kunde Hitler expandera utan krig i början?",
+  modelAnswer: `Hitler började bryta mot Versaillesfreden steg för steg. Han byggde upp militären och skickade trupper till Rhenlandet 1936 utan att andra länder ingrep.
 
-Denna politik kallas eftergiftspolitik. Länderna ville undvika ett nytt krig och trodde att Hitlers krav skulle ta slut. Därför kunde Tyskland expandera utan att det blev krig i början.`
-      },
-      {
-        title: "Fråga 3",
-        text: "Varför attackerade Tyskland Polen och vilken roll spelade relationen med Sovjetunionen?",
-        modelAnswer: `Hitler ville expandera österut och skapa "livsrum" för tyskar. Polen låg strategiskt och hade områden som Tyskland tidigare förlorat efter första världskriget.
+1938 tog Tyskland över Österrike (Anschluss). Samma år fick Hitler områden i Tjeckoslovakien genom Münchenöverenskommelsen.
 
-För att undvika ett tvåfrontskrig slöt Tyskland och Sovjetunionen Molotov–Ribbentrop-pakten. I ett hemligt tillägg delade de upp Östeuropa mellan sig, inklusive Polen.
+Storbritannien och Frankrike ville undvika krig och lät därför Hitler fortsätta. Detta kallas eftergiftspolitik.`
+},
 
-Den 1 september 1939 attackerade Tyskland Polen från väst. Några veckor senare gick Sovjetunionen in från öst. Detta gjorde att Polen snabbt besegrades. Angreppet fick Storbritannien och Frankrike att förklara krig mot Tyskland, vilket startade andra världskriget.`
-      },
-      {
-        title: "Fråga 4",
-        text: "Vad menas med blixkrig och varför var det framgångsrikt?",
-        modelAnswer: `Blixkrig (tyska "Blitzkrieg") var en snabb och rörlig krigföring. Den byggde på att flygplan bombade viktiga mål samtidigt som stridsvagnar och motoriserade trupper snabbt ryckte fram. Målet var att bryta igenom fiendens linjer och skapa förvirring innan motståndaren hann organisera sig.
+{
+  title: "Fråga 3",
+  text: "Varför attackerade Tyskland Polen?",
+  modelAnswer: `Hitler ville utöka Tyskland och skapa livsrum. Polen hade områden som Tyskland tidigare förlorat.
 
-Tyskland använde denna taktik när de anföll Polen 1939 och senare Frankrike 1940. Genom snabb kommunikation, radio och samordning mellan flyg och marktrupper kunde de omringa fienden.
+Tyskland och Sovjetunionen skrev ett avtal där de delade upp Polen mellan sig. När Tyskland attackerade Polen 1939 startade andra världskriget.`
+},
 
-Blixkriget var framgångsrikt eftersom många länder fortfarande planerade för ett långsamt skyttegravskrig som under första världskriget. De var inte redo för snabba anfall, vilket gav Tyskland stora tidiga segrar.`
-      }
-    ];
+{
+  title: "Fråga 4",
+  text: "Vad är blixkrig?",
+  modelAnswer: `Blixkrig är en snabb krigsmetod där flyg och stridsvagnar används tillsammans för att snabbt slå ut fienden.
 
-    const questionsContainer = document.getElementById('questions');
+Metoden var effektiv eftersom många länder inte var förberedda på snabba attacker.`
+}
+];
 
-    function renderQuestions() {
-      questionsContainer.innerHTML = '';
-      questions.forEach((q, index) => {
-        const card = document.createElement('div');
-        card.className = 'question-card';
+const container = document.getElementById("questions");
 
-        card.innerHTML = `
-          <div class="question-title">${q.title}</div>
-          <div class="question-text">${q.text}</div>
-          <textarea id="answer-${index}" placeholder="Skriv ditt svar här..."></textarea>
-          <div id="model-${index}" class="answer-box">
-            <div class="answer-label">Mallsvar:</div>
-            <div style="white-space: pre-line;">${q.modelAnswer}</div>
-          </div>
-        `;
+questions.forEach((q, i) => {
+  const div = document.createElement("div");
+  div.className = "question";
 
-        questionsContainer.appendChild(card);
-      });
-    }
+  div.innerHTML = `
+    <b>${q.title}</b><br>
+    ${q.text}
+    <textarea id="answer-${i}"></textarea>
+    <div id="model-${i}" class="answer">${q.modelAnswer}</div>
+  `;
 
-    function submitAnswers() {
-      const warning = document.getElementById('warning');
-      let allAnswered = true;
+  container.appendChild(div);
+});
 
-      questions.forEach((_, index) => {
-        const answer = document.getElementById(`answer-${index}`).value.trim();
-        if (!answer) {
-          allAnswered = false;
-        }
-      });
+function submitAnswers() {
+  let allAnswered = true;
 
-      if (!allAnswered) {
-        warning.style.display = 'block';
-        return;
-      }
+  questions.forEach((_, i) => {
+    const val = document.getElementById(`answer-${i}`).value.trim();
+    if (!val) allAnswered = false;
+  });
 
-      warning.style.display = 'none';
-      questions.forEach((_, index) => {
-        document.getElementById(`model-${index}`).style.display = 'block';
-      });
-    }
+  if (!allAnswered) {
+    document.getElementById("warning").style.display = "block";
+    return;
+  }
 
-    function resetAnswers() {
-      document.getElementById('warning').style.display = 'none';
-      questions.forEach((_, index) => {
-        document.getElementById(`answer-${index}`).value = '';
-        document.getElementById(`model-${index}`).style.display = 'none';
-      });
-    }
+  document.getElementById("warning").style.display = "none";
 
-    renderQuestions();
-  </script>
+  questions.forEach((_, i) => {
+    document.getElementById(`model-${i}`).style.display = "block";
+  });
+}
+
+function resetAnswers() {
+  document.getElementById("warning").style.display = "none";
+
+  questions.forEach((_, i) => {
+    document.getElementById(`answer-${i}`).value = "";
+    document.getElementById(`model-${i}`).style.display = "none";
+  });
+}
+</script>
+
 </body>
 </html>
